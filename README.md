@@ -113,10 +113,14 @@
     $ helm reset
     $ kubectl create namespace lab
 
+<br/>
+
     $ cd lab04_tiller_serviceaccount/yaml
     $ kubectl create -f tiller-serviceaccount.yaml 
     $ kubectl create -f tiller-role.yaml
     $ kubectl create -f tiller-rolebinding.yaml 
+
+<br/>
 
     $ helm init --service-account tiller --tiller-namespace lab
 
@@ -281,6 +285,203 @@ http://frontend.minikube.local/
 <br/>
 
 ![Application](/img/pic-09.png?raw=true)
+
+
+    $ minikube stop
+    $ minikube delete
+    $ minikube start --memory 4096
+
+    $ minikube addons enable ingress
+
+<br/>
+
+    $ helm init
+    $ kubectl get deployment.apps/tiller-deploy --namespace=kube-system
+
+<br/>
+
+<!--
+
+    $ helm reset
+
+    $ kubectl create namespace lab
+
+    $ helm init --service-account tiller --tiller-namespace lab
+
+    $ kubectl get all --namespace=lab
+
+-->
+
+<br/>
+
+**lab7**
+
+    $ cd lab07_helm_template_final/chart
+    $ helm template guestbook | less
+    $ helm install guestbook --dry-run --debug
+    $ helm install guestbook
+
+<br/>
+
+    $ kubectl get pods
+    NAME                                    READY   STATUS    RESTARTS   AGE
+    lame-lizard-backend-7ddb696b68-zbhdj    0/1     Error     3          89s
+    lame-lizard-database-6db7c9cdd-xc2cc    1/1     Running   0          89s
+    lame-lizard-frontend-5bfbd898f7-bjjkr   1/1     Running   0          89s
+
+
+
+<br/>
+
+**lab8**
+
+    $ cd ../../lab08_helm_template_final/chart
+    $ helm install guestbook --dry-run --debug
+
+    $ helm list --short
+    lame-lizard
+
+    $ helm upgrade lame-lizard guestbook
+    $ kubectl get pods
+
+    // delete stupid pod
+    $ kubectl delete pod lame-lizard-backend-7ddb696b68-zbhdj
+
+    $ kubectl get pods
+    NAME                                    READY   STATUS    RESTARTS   AGE
+    lame-lizard-backend-7ddb696b68-5znp4    1/1     Running   0          50s
+    lame-lizard-database-6db7c9cdd-xc2cc    1/1     Running   0          156m
+    lame-lizard-frontend-5bfbd898f7-bjjkr   1/1     Running   0          156m
+
+
+<br/>
+
+### 31 - Demo - Installing Dev and Test Releases
+
+
+**lab9**
+
+<br/>
+
+    # vi /etc/hosts
+
+```
+#---------------------------------------------------------------------
+# Minikube cluster
+#---------------------------------------------------------------------
+
+172.17.0.2 frontend.minikube.local 
+172.17.0.2 backend.minikube.local
+172.17.0.2 dev.frontend.minikube.local 
+172.17.0.2 dev.backend.minikube.local
+172.17.0.2 test.frontend.minikube.local 
+172.17.0.2 test.backend.minikube.local
+```
+
+    $ helm delete --purge lame-lizard
+    $ helm install guestbook --name dev --set frontend.config.guestbook_name=DEV
+    $ helm install guestbook --name test --set frontend.config.guestbook_name=TEST
+
+
+<br/>
+
+## 07 - Managing Dependencies
+
+<br/>
+
+![Application](/img/pic-10.png?raw=true)
+
+<br/>
+
+### 35 - Demo - Packaging and Publishing Charts
+
+**lab10**
+
+    $ mv guestbook/charts dist
+    $ cd dist
+    
+    $ helm package frontend backedn database
+    $ helm repo index .
+
+    $ hem serve &
+
+http://localhost:8879
+
+    $ helm repo list
+
+<br/>
+
+### 38 - Demo - Managing Dependencies
+
+    $ vi guestbook/requirements.yaml
+    $ helm dependency update guestbook
+    $ ls guestbook/charts
+    $ helm dependency list guestbook
+    $ helm install guestbook
+    $ helm list
+    $ helm status brazen-quail
+    $ helm delete brazen-quail --purge
+    $ vi guestbook/requirements.lock
+
+<br/>
+
+    $ vi frontend/Chart.yaml
+
+upd version
+    
+    $ helm package frontend
+
+http://localhost:8879
+
+    $ cd ..
+    $ helm dependency build questbook
+    $ ls guestbook/charts
+
+    $ helm dependency update guestbook
+    $ ls guestbook/charts
+
+
+<br/>
+
+### 39 - Demo - Controlling Dependencies with Conditions and Tags
+
+    $ helm install guestbook --set backend.enabled=false --set database.enabled=false
+    $ helm install guestbook --set tags.api=false
+
+<br/>
+
+## 08 - Using Existing Helm Charts 
+
+<br/>
+
+### 43 - Demo - Using a Stable MongoDB Chart
+
+**lab11**
+
+    $ ls guestbook/charts
+    $ rm guestbook/charts/database-1.2.2.tgz
+    
+    $ heml repo list
+    $ help search mongodb
+    $ helm inspect stable/mongodb | less
+
+
+<br/>
+
+### 44 - Demo - Installing Wordpress in Kubernetes in 1 Minute
+
+    $ helm search wordpress
+    $ helm install stable/wordpress
+
+    $ helm list --short
+
+    // get password
+    $ (kubectl get secret --namespace default zeroed-greyhound-wordpress -o jsonpath="{.data.wordpress-password}" | base64 --decode)
+
+    $ kubectl get service
+
+http://172.17.0.2:32277/
+
 
 ---
 
