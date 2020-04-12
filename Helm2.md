@@ -400,7 +400,7 @@ http://frontend.minikube.local/
     $ mv guestbook/charts dist
     $ cd dist
     
-    $ helm package frontend backedn database
+    $ helm package frontend backend database
     $ helm repo index .
 
     $ helm serve &
@@ -434,7 +434,7 @@ upd version
 http://localhost:8879
 
     $ cd ..
-    $ helm dependency build questbook
+    $ helm dependency build guestbook
     $ ls guestbook/charts
 
     $ helm dependency update guestbook
