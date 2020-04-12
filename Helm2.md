@@ -1,11 +1,6 @@
 # [Philippe Collignon] Packaging Applications with Helm for Kubernetes [ENG, 30 Jul 2019]
 
 
-## [Helm2 + Tiller](./Helm2.md)
-
-
-# NEED TO UPDATE TO HELM3 (in progress)
-
 <br/>
 
 ![Application](/img/pic-00.png?raw=true)
@@ -30,6 +25,7 @@
 ![Application](/img/pic-03.png?raw=true)
 
 
+
 <br/>
 
 ### Minikube installation
@@ -49,7 +45,7 @@
 
 <br/>
 
-    $ minikube start --memory 4096
+    $ minikube start
 
     $ minikube addons enable ingress
 
@@ -88,15 +84,77 @@
 
 ### Helm installation
 
-    $ curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
+    $ curl https://raw.githubusercontent.com/helm/helm/master/scripts/get | bash
 
     $ kubectl config view 
 
     $ helm init
 
     $ helm version --short
-    v3.1.2+gd878d4d
+    Client: v2.16.5+g89bd14c
+    Server: v2.16.5+g89bd14c
 
+    $ kubectl get all --namespace=kube-system -l name=tiller
+
+<br/>
+
+<!--
+
+    $ helm create nginx-demo
+    $ helm install nginx-demo
+    $ kubectl get all | grep nginx-demo
+
+-->
+
+<br/>
+
+### 09 - Configuring Helm Security
+
+    $ helm reset
+    $ kubectl create namespace lab
+
+<br/>
+
+    $ cd lab04_tiller_serviceaccount/yaml
+    $ kubectl create -f tiller-serviceaccount.yaml 
+    $ kubectl create -f tiller-role.yaml
+    $ kubectl create -f tiller-rolebinding.yaml 
+
+<br/>
+
+    $ helm init --service-account tiller --tiller-namespace lab
+
+    $ kubectl get all --namespace=lab
+
+
+
+<br/>
+
+### 10 - Running Tiller Locally
+
+<br/>
+
+![Application](/img/pic-04.png?raw=true)
+
+    $ tiller
+    $ helm init --client-only
+
+<br/>
+
+    $ export HELM_HOME=/home/$(whoami)/.helm
+    $ export HELM_HOST=localhost:44134
+
+    $ helm version --short
+    Client: v2.16.5+g89bd14c
+    Server: v2.16.5+g89bd14c
+
+<br/>
+
+    $ helm create nginx-localtiller-demo
+    $ helm install nginx-localtiller-demo
+    $ kubectl get all | grep localtiller
+    $ kubectl get pod --namespace=kube-system -l name=tiller
+    $ kubectl get configmaps --namespace=kube-system
 
 <br/>
 
@@ -111,12 +169,13 @@
 
 ## 05 - Building Helm Charts
 
+
 <br/>
 
 ### Release 1.0
 
     $ cd lab05_helm_chart_version1/chart/
-    $ helm install myguestbook guestbook
+    $ helm install guestbook
 
 <br/>
 
@@ -127,11 +186,12 @@
 <br/>
 
     $ helm list --short
-    myguestbook
+    exacerbated-toucan
+    insipid-toad
 
 <br/>
 
-    $ helm status myguestbook | less 
+    $ helm status insipid-toad | less 
 
 http://frontend.minikube.local/
 
@@ -154,7 +214,7 @@ templates/frontend.yaml
 
 <br/>
 
-    $ helm upgrade myguestbook guestbook
+    $ helm upgrade insipid-toad guestbook
 
 <br/>
 
@@ -167,10 +227,14 @@ templates/frontend.yaml
 <br/>
 
     $ helm history insipid-toad
+    REVISION	UPDATED                 	STATUS    	CHART          APP VERSION	DESCRIPTION     
+    1       	Sat Apr 11 04:54:47 2020	SUPERSEDED	guestbook-0.1.01.0        	Install complete
+    2       	Sat Apr 11 05:03:37 2020	SUPERSEDED	guestbook-0.1.01.1        	Upgrade complete
+    3       	Sat Apr 11 05:06:34 2020	DEPLOYED  	guestbook-0.1.01.0        	Rollback to 1   
 
 <br/>
 
-    $ helm delete myguestbook --purge
+    $ helm delete insipid-toad --purge
 
 <br/>
 
@@ -180,12 +244,12 @@ templates/frontend.yaml
     
 
     // upgrade
-    $ helm upgrade myguestbook guestbook
+    $ helm upgrade insipid-toad guestbook
 
 or
 
     // install from scratch
-    $ helm install myguestbook guestbook
+    $ helm install guestbook
 
 <br/>
 
@@ -198,10 +262,11 @@ or
 <br/>
 
     $ helm list --short
+    vocal-unicorn
 
 <br/>
 
-    $ helm status myguestbook
+    $ helm status vocal-unicorn
 
 http://frontend.minikube.local/
 
@@ -231,6 +296,21 @@ http://frontend.minikube.local/
 <br/>
 
     $ helm init
+    $ kubectl get deployment.apps/tiller-deploy --namespace=kube-system
+
+<br/>
+
+<!--
+
+    $ helm reset
+
+    $ kubectl create namespace lab
+
+    $ helm init --service-account tiller --tiller-namespace lab
+
+    $ kubectl get all --namespace=lab
+
+-->
 
 <br/>
 
@@ -239,11 +319,16 @@ http://frontend.minikube.local/
     $ cd lab07_helm_template_final/chart
     $ helm template guestbook | less
     $ helm install guestbook --dry-run --debug
-    $ helm install myguestbook guestbook
+    $ helm install guestbook
 
 <br/>
 
     $ kubectl get pods
+    NAME                                    READY   STATUS    RESTARTS   AGE
+    lame-lizard-backend-7ddb696b68-zbhdj    0/1     Error     3          89s
+    lame-lizard-database-6db7c9cdd-xc2cc    1/1     Running   0          89s
+    lame-lizard-frontend-5bfbd898f7-bjjkr   1/1     Running   0          89s
+
 
 
 <br/>
@@ -254,14 +339,20 @@ http://frontend.minikube.local/
     $ helm install guestbook --dry-run --debug
 
     $ helm list --short
+    lame-lizard
 
-    $ helm upgrade myguestbook guestbook
+    $ helm upgrade lame-lizard guestbook
     $ kubectl get pods
 
     // delete stupid pod
-    $ kubectl delete pod myguestbook-backend-7ddb696b68-zbhdj
+    $ kubectl delete pod lame-lizard-backend-7ddb696b68-zbhdj
 
     $ kubectl get pods
+    NAME                                    READY   STATUS    RESTARTS   AGE
+    lame-lizard-backend-7ddb696b68-5znp4    1/1     Running   0          50s
+    lame-lizard-database-6db7c9cdd-xc2cc    1/1     Running   0          156m
+    lame-lizard-frontend-5bfbd898f7-bjjkr   1/1     Running   0          156m
+
 
 <br/>
 
@@ -287,9 +378,9 @@ http://frontend.minikube.local/
 172.17.0.2 test.backend.minikube.local
 ```
 
-    $ helm delete --purge myguestbook
-    $ helm install myguestbook guestbook --name dev --set frontend.config.guestbook_name=DEV
-    $ helm install myguestbook guestbook --name test --set frontend.config.guestbook_name=TEST
+    $ helm delete --purge lame-lizard
+    $ helm install guestbook --name dev --set frontend.config.guestbook_name=DEV
+    $ helm install guestbook --name test --set frontend.config.guestbook_name=TEST
 
 
 <br/>
@@ -326,10 +417,10 @@ http://localhost:8879
     $ helm dependency update guestbook
     $ ls guestbook/charts
     $ helm dependency list guestbook
-    $ helm install myguestbook guestbook
+    $ helm install guestbook
     $ helm list
-    $ helm status myguestbook
-    $ helm delete myguestbook --purge
+    $ helm status brazen-quail
+    $ helm delete brazen-quail --purge
     $ vi guestbook/requirements.lock
 
 <br/>
@@ -371,7 +462,7 @@ http://localhost:8879
     $ rm guestbook/charts/database-1.2.2.tgz
     
     $ helm repo list
-    $ helm search mongodb
+    $ help search mongodb
     $ helm inspect stable/mongodb | less
 
 
