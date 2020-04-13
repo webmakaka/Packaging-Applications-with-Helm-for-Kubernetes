@@ -9,8 +9,10 @@
 
 <br/>
 
-**Environment preparation in course study**
+## Local Helm Repository
 
+
+### [Environment preparation same as here](https://github.com/webmakaka/charts-repo)
 
 <br/>
 
@@ -46,7 +48,10 @@ NAME           	CHART VERSION	APP VERSION	DESCRIPTION
 local/guestbook	0.1.0        	1.0        	A Helm chart for Guestbook 1.0
 ```
 
-    $ helm fetch local/guestbook
+<br/>
+
+    // check if something not works
+    // $ helm fetch local/guestbook
 
 <br/>
 
@@ -65,6 +70,15 @@ http://frontend.minikube.local/
 <br/>
 
 ![Application](/img/pic-05.png?raw=true)
+
+
+<br/>
+
+
+### Remove everything
+
+    $ helm delete myguestbook
+    $ helm repo remove local
 
 ---
 
