@@ -1,5 +1,7 @@
 # [Philippe Collignon] Packaging Applications with Helm for Kubernetes [ENG, 30 Jul 2019]
 
+**Original src:**  
+https://github.com/phcollignon/helm
 
 # Course Study materials:
 
@@ -10,7 +12,6 @@
 <br/>
 
 ## Local Helm Repository
-
 
 ### [Environment preparation same as here](https://github.com/webmak1/charts-repo)
 
@@ -80,6 +81,13 @@ http://frontend.minikube.local/
     $ helm delete myguestbook
     $ helm repo remove local
 
+<br/>
+
 ---
 
-<a href="https://marley.org"><strong>Marley</strong></a>
+<br/>
+
+**Marley**
+
+Any questions in english: <a href="https://jsdev.org/chat/">Telegram Chat</a>  
+Любые вопросы на русском: <a href="https://jsdev.ru/chat/">Телеграм чат</a>
