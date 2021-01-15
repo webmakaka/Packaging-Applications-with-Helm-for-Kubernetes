@@ -12,7 +12,7 @@
 ## Local Helm Repository
 
 
-### [Environment preparation same as here](https://github.com/webmakaka/charts-repo)
+### [Environment preparation same as here](https://github.com/webmak1/charts-repo)
 
 <br/>
 
