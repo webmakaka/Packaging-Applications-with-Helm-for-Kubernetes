@@ -300,17 +300,7 @@ http://frontend.minikube.local/
 
 <br/>
 
-<!--
 
-    $ helm reset
-
-    $ kubectl create namespace lab
-
-    $ helm init --service-account tiller --tiller-namespace lab
-
-    $ kubectl get all --namespace=lab
-
--->
 
 <br/>
 
