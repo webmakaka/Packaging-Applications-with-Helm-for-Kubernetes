@@ -255,39 +255,42 @@ OK!
 
 <br/>
 
+    $ cd v3/chart
+    $ helm delete dev guestbook
+    $ helm delete test guestbook
+
+<br/>
+
 ## 07 - Managing Dependencies
 
 <br/>
 
-![Application](/img/pic-10.png?raw=true)
+![Application](/img/pic-m07-pic01.png?raw=true)
 
 <br/>
 
-    // ChartMuseum Instalation
-    $ curl -LO https://s3.amazonaws.com/chartmuseum/release/latest/bin/linux/amd64/chartmuseum && chmod +x chartmuseum && sudo mv chartmuseum /usr/local/bin/
+```
+// ChartMuseum Instalation
+$ curl -LO https://s3.amazonaws.com/chartmuseum/release/latest/bin/linux/amd64/chartmuseum && chmod +x chartmuseum && sudo mv chartmuseum /usr/local/bin/
+```
 
 <br/>
 
-// https://github.com/chartmuseum/helm-push
-
-<br/>
-
-    $ helm plugin install https://github.com/chartmuseum/helm-push.git
+```
+$ helm plugin install https://github.com/chartmuseum/helm-push.git
+```
 
 <br/>
 
 ### 35 - Demo - Packaging and Publishing Charts
 
-**lab10**
-
-    $ minikube stop && minikube delete && minikube start --memory 4096
-    $ minikube addons enable ingress
-
 <br/>
 
-    $ cd lab10_helm_dependencies_begin/chart
+    $ cd v4/chart
     $ mv guestbook/charts dist
     $ cd dist
+
+<br/>
 
     $ helm package frontend backend database
     $ helm repo index .
@@ -318,6 +321,16 @@ $ chartmuseum --debug --port=8080 \
 
 <br/>
 
+```
+$ helm search repo local/
+NAME          	CHART VERSION	APP VERSION	DESCRIPTION
+local/backend 	1.2.2        	1.0        	A Helm chart for Guestbook Backend 1.0
+local/database	1.2.2        	3.6        	A Helm chart for Guestbook Database Mongodb 3.6
+local/frontend	1.2.0        	2.0        	A Helm chart for Guestbook Frontend 2.0
+```
+
+<br/>
+
     $ curl -v http://localhost:8080/index.yaml
 
 <br/>
@@ -326,21 +339,12 @@ $ chartmuseum --debug --port=8080 \
     NAME       	URL
     local	http://localhost:8080
 
-<br/>
-
-    $ helm search repo local
-    NAME                	CHART VERSION	APP VERSION	DESCRIPTION
-    stable/local  	2.10.0       	0.12.0     	Host your own Helm Chart Repository
-    local/backend 	1.2.2        	1.0        	A Helm chart for Guestbook Backend 1.0
-    local/database	1.2.2        	3.6        	A Helm chart for Guestbook Database Mongodb 3.6
-    local/frontend	1.2.0        	2.0        	A Helm chart for Guestbook Frontend 2.0
-
-<br/>
+<!-- <br/>
 
     // checks
     $ helm fetch local/frontend
     $ helm fetch local/backend
-    $ helm fetch local/database
+    $ helm fetch local/database -->
 
 <br/>
 
@@ -350,69 +354,55 @@ $ chartmuseum --debug --port=8080 \
 
 ### 38 - Demo - Managing Dependencies
 
-**lab10_helm_dependencies_begin/chart**
-
 <br/>
 
     $ vi guestbook/requirements.yaml
+
+<br/>
 
 ```
 dependencies:
   - name: backend
     version: ~1.2.2
-    repository: http://127.0.0.1:8080/charts
+    repository: http://127.0.0.1:8080/
   - name: frontend
     version: ^1.2.0
-    repository: http://127.0.0.1:8080/charts
+    repository: http://127.0.0.1:8080/
   - name: database
     version: ~1.2.2
-    repository: http://127.0.0.1:8080/charts
+    repository: http://127.0.0.1:8080/
 ```
 
 <br/>
 
 ```
 $ helm dependency update guestbook
-Hang tight while we grab the latest from your chart repositories...
-...Successfully got an update from the "local" chart repository
-Update Complete. ⎈Happy Helming!⎈
-Saving 3 charts
-Downloading backend from repo http://127.0.0.1:8080/charts
-Save error occurred:  could not find : chart backend not found in http://127.0.0.1:8080/charts
-Deleting newly downloaded charts, restoring pre-update state
-Error: could not find : chart backend not found in http://127.0.0.1:8080/charts
 ```
 
 <br/>
 
-    $ ls guestbook/charts
+```
+$ ls guestbook/charts
+backend-1.2.2.tgz  database-1.2.2.tgz  frontend-1.2.0.tgz
+```
 
-    should be 3 files here, but there is no files
-
-<br/>
+<!-- <br/>
 
     $ cd guestbook/charts
 
     $ helm fetch local/frontend
     $ helm fetch local/backend
-    $ helm fetch local/database
+    $ helm fetch local/database -->
 
 <br/>
 
-    $ ls
-    backend-1.2.2.tgz  database-1.2.2.tgz  frontend-1.2.0.tgz
-
-<br/>
-
-    $ cd ../../
-
-<br/>
-
-    $ helm dependency list guestbook
-    NAME    	VERSION	REPOSITORY                  	STATUS
-    backend 	~1.2.2 	http://127.0.0.1:8080/charts	ok
-    frontend	^1.2.0 	http://127.0.0.1:8080/charts	ok
-    database	~1.2.2 	http://127.0.0.1:8080/charts	ok
+```
+$ helm dependency list guestbook
+NAME    	VERSION	REPOSITORY            	STATUS
+backend 	~1.2.2 	http://127.0.0.1:8080/	ok
+frontend	^1.2.0 	http://127.0.0.1:8080/	ok
+database	~1.2.2 	http://127.0.0.1:8080/	ok
+```
 
 <br/>
 
@@ -420,19 +410,34 @@ Error: could not find : chart backend not found in http://127.0.0.1:8080/charts
 
 <br/>
 
-    $ helm list
+```
+$ helm list
+NAME       	NAMESPACE	REVISION	UPDATED                                	STATUS  	CHART          	APP VERSION
+myguestbook	default  	1       	2021-01-16 04:22:24.867593634 +0300 MSK	deployed	guestbook-1.2.2	2.0
+```
+
+<br/>
+
     $ helm status myguestbook
 
 <br/>
 
-    $ helm delete myguestbook --purge
-
-    // There is no file
-    $ vi guestbook/requirements.lock
+```
+http://frontend.minikube.local/
+OK!
+```
 
 <br/>
 
-    $ cd ../dist
+    $ helm delete myguestbook
+
+<br/>
+
+    $ ls guestbook/requirements.lock
+
+<br/>
+
+    $ cd dist/
 
 <br/>
 
@@ -451,14 +456,6 @@ upd version to version: 1.2.1
 
 ```
 $ helm dependency build guestbook
-Hang tight while we grab the latest from your chart repositories...
-...Successfully got an update from the "local" chart repository
-Update Complete. ⎈Happy Helming!⎈
-Saving 3 charts
-Downloading backend from repo http://127.0.0.1:8080/charts
-Save error occurred:  could not find : chart backend not found in http://127.0.0.1:8080/charts
-Deleting newly downloaded charts, restoring pre-update state
-Error: could not find : chart backend not found in http://127.0.0.1:8080/charts
 
 ```
 
@@ -466,99 +463,42 @@ Error: could not find : chart backend not found in http://127.0.0.1:8080/charts
 
 ```
 $ helm dependency update guestbook
-Hang tight while we grab the latest from your chart repositories...
-...Successfully got an update from the "local" chart repository
-Update Complete. ⎈Happy Helming!⎈
-Saving 3 charts
-Downloading backend from repo http://127.0.0.1:8080/charts
-Save error occurred:  could not find : chart backend not found in http://127.0.0.1:8080/charts
-Deleting newly downloaded charts, restoring pre-update state
-Error: could not find : chart backend not found in http://127.0.0.1:8080/charts
 ```
 
     $ ls guestbook/charts
 
-Version should be updated, but not
+```
+$ ls guestbook/charts
+backend-1.2.2.tgz  database-1.2.2.tgz  frontend-1.2.1.tgz
+```
 
 <br/>
 
-### 39 - Demo - Controlling Dependencies with Conditions and Tags
-
-    $ helm install guestbook --set backend.enabled=false --set database.enabled=false
-    $ helm install guestbook --set tags.api=false
-
-<br/>
-
-## 08 - Using Existing Helm Charts
-
-<br/>
-
-### 43 - Demo - Using a Stable MongoDB Chart
-
-**lab11**
-
-    $ ls guestbook/charts
-    $ rm guestbook/charts/database-1.2.2.tgz
-
-    $ helm repo list
-    $ helm search repo mongodb
-    $ helm inspect stable/mongodb | less
+```
+$ helm dependency list guestbook
+NAME    	VERSION	REPOSITORY            	STATUS
+backend 	~1.2.2 	http://127.0.0.1:8080/	ok
+frontend	^1.2.0 	http://127.0.0.1:8080/	ok
+database	~1.2.2 	http://127.0.0.1:8080/	ok
+```
 
 <br/>
 
-### 44 - Demo - Installing Wordpress in Kubernetes in 1 Minute
+```
+???
+I do not know is it rigt or not
+???
+```
 
-    $ helm repo add stable https://kubernetes-charts.storage.googleapis.com/
+    $ cd guestbook
+    $ helm package .
+    $ helm push guestbook-1.2.2.tgz local
+    $ helm repo update
+    $ helm search repo guestbook
 
-    // To remove
-    // $ helm repo remove stable
+<!--
 
-    $ helm search wordpress
-    $ helm install stable/wordpress
-
-    $ helm list --short
-
-    // get password
-    $ (kubectl get secret --namespace default zeroed-greyhound-wordpress -o jsonpath="{.data.wordpress-password}" | base64 --decode)
-
-    $ kubectl get service
-
-http://172.17.0.2:32277/
-
-<br/>
-
-<br/>
-
-# Course Study materials:
-
-## [Helm2 + Tiller](./Helm2.md)
-
-## [Helm3](./Helm3.md)
-
-<br/>
-
-## Local Helm Repository
-
-### [Environment preparation same as here](https://github.com/webmak1/charts-repo)
-
-<br/>
-
-    // Do not to forget
-    $ minikube addons enable ingress
-
-<br/>
-
-    $ mkdir /home/marley/repo
-
-    $ chartmuseum --debug --port=8080 \
-    --storage="local" \
-    --storage-local-rootdir="/home/marley/repo"
-
-    $ helm repo add local http://localhost:8080
-
-<br/>
-
-    $ cd lab05_helm_chart_version1/chart
+    cd v4
 
     $ mv guestbook/charts dist
 
@@ -593,15 +533,71 @@ local/guestbook	0.1.0        	1.0        	A Helm chart for Guestbook 1.0
 
 http://frontend.minikube.local/
 
+-->
+
 <br/>
 
-![Application](/img/pic-05.png?raw=true)
+### 39 - Demo - Controlling Dependencies with Conditions and Tags
+
+    $ cd v5
+
+    $ helm install guestbook --set backend.enabled=false --set database.enabled=false
+    $ helm install guestbook --set tags.api=false
+
+<br/>
+
+## 08 - Using Existing Helm Charts
+
+<br/>
+
+### Using a Stable MongoDB Chart
+
+    $ cd apps/v6/chart
+
+    $ ls guestbook/charts
+    $ rm guestbook/charts/database-1.2.2.tgz
+
+    $ helm repo list
+    $ helm search repo mongodb
+    $ helm inspect stable/mongodb | less
+
+<br/>
+
+    $ vi guestbook/requirements.yaml
+    $ heml dependency update guestbook
+    $ ls guestbook/charts
+
+<br/>
+
+    $ vi guestbook/values.yaml
+    $ heml install dev guestbook
+
+<br/>
+
+### Installing Wordpress in Kubernetes in 1 Minute
+
+    $ helm repo add stable https://kubernetes-charts.storage.googleapis.com/
+
+    // To remove
+    // $ helm repo remove stable
+
+    $ helm search wordpress
+    $ helm install stable/wordpress
+
+    $ helm list --short
+
+    // get password
+    $ (kubectl get secret --namespace default zeroed-greyhound-wordpress -o jsonpath="{.data.wordpress-password}" | base64 --decode)
+
+    $ kubectl get service
+
+http://172.17.0.2:32277/
 
 <br/>
 
 ### Remove everything
 
-    $ helm delete myguestbook
+    $ helm delete guestbook
     $ helm repo remove local
 
 <br/>
