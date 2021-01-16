@@ -1,5 +1,0 @@
-backend:
-  secret:
-    mongodb_uri:
-      username: admin
-      password: password

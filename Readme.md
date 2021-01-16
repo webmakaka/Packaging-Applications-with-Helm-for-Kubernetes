@@ -123,29 +123,26 @@ $ {
 
 <br/>
 
-    $ kubectl get pod -l app=frontend
-    NAME                        READY   STATUS    RESTARTS   AGE
-    frontend-5f667c694c-bdsdm   1/1     Running   0          44s
-
-<br/>
-
     $ helm list --short
     myguestbook
 
 <br/>
 
-    $ helm status myguestbook | less
+```
+$ helm status myguestbook
+NAME: myguestbook
+LAST DEPLOYED: Sat Jan 16 01:12:05 2021
+NAMESPACE: default
+STATUS: deployed
+REVISION: 1
+TEST SUITE: None
+```
 
 http://frontend.minikube.local/
 
 <br/>
 
-![Application](/img/pic-05.png?raw=true)
-
-change in Chart.yaml
-
-    appVersion: "1.1"
-    description: A Helm chart for Guestbook 1.1
+![Application](/img/pic-m05-pic02.png?raw=true)
 
 <br/>
 
@@ -159,10 +156,6 @@ templates/frontend.yaml
 
 <br/>
 
-![Application](/img/pic-06.png?raw=true)
-
-<br/>
-
     $ helm list
 
 <br/>
@@ -171,44 +164,7 @@ templates/frontend.yaml
 
 <br/>
 
-    $ helm delete myguestbook --purge
-
-<br/>
-
-### Upgradint Release to version 2.0
-
-    $ cd lab06_helm_chart_version2/chart
-
-
-    // upgrade
-    $ helm upgrade myguestbook guestbook
-
-or
-
-    // install from scratch
-    $ helm install myguestbook guestbook
-
-<br/>
-
-    $ kubectl get pods
-    NAME                        READY   STATUS    RESTARTS   AGE
-    backend-5f68d76855-sdw2q    0/1     Error     1          51s
-    frontend-74cc68bc89-qczj9   1/1     Running   0          51s
-    mongodb-b96698956-zl459     1/1     Running   0          51s
-
-<br/>
-
-    $ helm list --short
-
-<br/>
-
-    $ helm status myguestbook
-
-http://frontend.minikube.local/
-
-<br/>
-
-![Application](/img/pic-07.png?raw=true)
+    $ helm delete myguestbook
 
 <br/>
 
@@ -216,56 +172,60 @@ http://frontend.minikube.local/
 
 <br/>
 
-![Application](/img/pic-08.png?raw=true)
+![Application](/img/pic-m06-pic01.png?raw=true)
 
 <br/>
 
-![Application](/img/pic-09.png?raw=true)
+![Application](/img/pic-m06-pic02.png?raw=true)
 
 <br/>
 
-    $ minikube stop && minikube delete && minikube start --memory 4096
-    $ minikube addons enable ingress
+![Application](/img/pic-m06-pic03.png?raw=true)
 
 <br/>
 
-**lab7**
+    $ cd v2/chart
 
-    $ cd lab07_helm_template_final/chart
+    // check
     $ helm template guestbook | less
+
+    // check
     $ helm install guestbook --dry-run --debug
+
+<br/>
+
     $ helm install myguestbook guestbook
+    // $ helm upgrade myguestbook guestbook
 
 <br/>
 
     $ kubectl get pods
 
 <br/>
-
-**lab8**
-
-    $ cd ../../lab08_helm_template_final/chart
-    $ helm install guestbook --dry-run --debug
-
-    $ helm list --short
-
-    $ helm upgrade myguestbook guestbook
-    $ kubectl get pods
 
     // delete stupid pod
     $ kubectl delete pod myguestbook-backend-7ddb696b68-zbhdj
 
-    $ kubectl get pods
+<br/>
+
+```
+http://frontend.minikube.local/
+OK
+```
 
 <br/>
 
-### 31 - Demo - Installing Dev and Test Releases
+    $ helm delete myguestbook
+
+<br/>
+
+### Installing Dev and Test Releases
 
 **lab9**
 
 <br/>
 
-    # vi /etc/hosts
+    $ sudo vi /etc/hosts
 
 ```
 #---------------------------------------------------------------------
@@ -282,9 +242,16 @@ http://frontend.minikube.local/
 
 <br/>
 
-    $ helm delete --purge myguestbook
-    $ helm install myguestbook guestbook --name dev --set frontend.config.guestbook_name=DEV
-    $ helm install myguestbook guestbook --name test --set frontend.config.guestbook_name=TEST
+    $ cd v3/chart
+    $ helm install dev guestbook --set frontend.config.guestbook_name=DEV
+    $ helm install test guestbook --set frontend.config.guestbook_name=TEST
+
+<br/>
+
+```
+http://test.frontend.minikube.local/
+OK!
+```
 
 <br/>
 
@@ -384,6 +351,8 @@ $ chartmuseum --debug --port=8080 \
 ### 38 - Demo - Managing Dependencies
 
 **lab10_helm_dependencies_begin/chart**
+
+<br/>
 
     $ vi guestbook/requirements.yaml
 
