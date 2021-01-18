@@ -23,6 +23,6 @@ jobs:
       - name: Push the image to hub.docker.com
         run: |
           docker login -u webmakaka -p "${DOCKER_HUB_PASS}"
-          docker push webmakaka/webmakaka/frontend:2.0
+          docker push webmakaka/frontend:2.0
         env:
           DOCKER_HUB_PASS: ${{ secrets.DOCKER_HUB_PASS }}

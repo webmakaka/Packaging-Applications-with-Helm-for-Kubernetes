@@ -1,5 +1,3 @@
-# FROM node:lts-alpine3.12 as builder
-#FROM node:12.20.1-alpine3.12 as builder
 FROM node:10.23.1-alpine3.11 as builder
 
 WORKDIR /project
