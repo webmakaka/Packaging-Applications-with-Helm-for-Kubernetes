@@ -1,4 +1,5 @@
-FROM node:lts-alpine3.12 as builder
+FROM nginx:alpine as builder
+# FROM node:lts-alpine3.12 as builder
 
 WORKDIR /project
 
@@ -13,7 +14,7 @@ RUN npm run build
 # =========================
 
 # FROM node:lts-alpine3.12
-FROM nginx
+FROM nginx:alpine
 
 COPY nginx.conf /etc/nginx/nginx.conf
 
@@ -33,7 +34,7 @@ CMD ["nginx", "-g", "daemon off;"]
 # ---------------------
 # Original
 
-# FROM node:lts-alpine3.12
+# FROM nginx:alpine
 
 # COPY nginx.conf /etc/nginx/nginx.conf
 
