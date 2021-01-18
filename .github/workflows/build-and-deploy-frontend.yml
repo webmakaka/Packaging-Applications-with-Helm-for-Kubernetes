@@ -1,0 +1,28 @@
+name: Build and Deploy Frontend
+on:
+  pull_request:
+    branches:
+      - master
+  push:
+    branches:
+      - master
+    paths:
+      - 'apps/v1/app/frontend/**'
+
+jobs:
+  build:
+    name: Build Frontend
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@master
+
+      # DOCKERHUB
+
+      - name: Build the Docker container image
+        run: docker build ./apps/v1/app/frontend/ -f ./apps/v1/app/frontend/Dockerfile.prod -t webmakaka/webmakaka/frontend:2.0
+      - name: Push the image to hub.docker.com
+        run: |
+          docker login -u webmakaka -p "${DOCKER_HUB_PASS}"
+          docker push webmakaka/webmakaka/frontend:2.0
+        env:
+          DOCKER_HUB_PASS: ${{ secrets.DOCKER_HUB_PASS }}

@@ -3,5 +3,5 @@ kind: ConfigMap
 metadata:
   name: frontend-config
 data:
-  guestbook-name: "MyPopRock Festival 2.0"
-  backend-uri: "http://backend.minikube.local/guestbook"
+  guestbook-name: 'MyPopRock Festival 2.0'
+  backend-uri: 'http://backend.minikube.local/guestbook'

@@ -6,9 +6,9 @@ metadata:
   name: backend
 spec:
   ports:
-    - protocol: "TCP"
+    - protocol: 'TCP'
       port: 80
       targetPort: 3000
   selector:
     app: backend
- # type: NodePort
+  # type: NodePort
