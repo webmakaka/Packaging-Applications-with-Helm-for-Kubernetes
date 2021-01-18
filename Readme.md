@@ -116,7 +116,7 @@ $ {
 
 <br/>
 
-### Release 1.0
+### First try
 
     $ cd apps/v1/chart/
     $ helm install myguestbook guestbook
