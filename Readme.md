@@ -221,8 +221,6 @@ OK
 
 ### Installing Dev and Test Releases
 
-**lab9**
-
 <br/>
 
     $ sudo vi /etc/hosts
