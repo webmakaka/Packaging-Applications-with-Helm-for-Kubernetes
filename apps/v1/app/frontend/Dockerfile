@@ -1,5 +1,6 @@
-FROM nginx:alpine as builder
 # FROM node:lts-alpine3.12 as builder
+FROM node:10.23.1-alpine3.9 as builder
+
 
 WORKDIR /project
 
@@ -13,7 +14,6 @@ RUN npm run build
 
 # =========================
 
-# FROM node:lts-alpine3.12
 FROM nginx:alpine
 
 COPY nginx.conf /etc/nginx/nginx.conf
