@@ -19,7 +19,7 @@ jobs:
       # DOCKERHUB
 
       - name: Build the Docker container image
-        run: docker build ./apps/v1/app/frontend/ -f ./apps/v1/app/frontend/Dockerfile.prod -t webmakaka/webmakaka/frontend:2.0
+        run: docker build ./apps/v1/app/frontend/ -f ./apps/v1/app/frontend/Dockerfile -t webmakaka/webmakaka/frontend:2.0
       - name: Push the image to hub.docker.com
         run: |
           docker login -u webmakaka -p "${DOCKER_HUB_PASS}"
