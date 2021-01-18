@@ -1,4 +1,4 @@
-FROM node:lts-alpine3.13
+FROM node:lts-alpine3.12
 
 COPY nginx.conf /etc/nginx/nginx.conf
 

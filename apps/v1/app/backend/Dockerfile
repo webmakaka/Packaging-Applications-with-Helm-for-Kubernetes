@@ -1,4 +1,4 @@
-FROM node:lts-alpine3.13
+FROM node:lts-alpine3.12
 #FROM node:carbon-alpine
 
 ENV NPM_CONFIG_LOGLEVEL info
