@@ -1,0 +1,7 @@
+dependencies:
+  - name: frontend
+    condition: frontend.enabled
+  - name: backend
+    condition: backend.enabled
+#  - name: mongodb
+#    condition: mongodb.enabled

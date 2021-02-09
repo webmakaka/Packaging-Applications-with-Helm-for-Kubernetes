@@ -62,29 +62,43 @@ Client Version: v1.20.1
 
 <br/>
 
+### Skaffold installation
+
+```
+$ curl -Lo skaffold https://storage.googleapis.com/skaffold/releases/latest/skaffold-linux-amd64
+
+$ chmod +x skaffold
+$ sudo mv skaffold /usr/local/bin
+
+$ skaffold version
+v1.19.0
+```
+
+<br/>
+
 ### Run minikube
 
 ```
 $ {
-    minikube --profile my-profile config set memory 8192
-    minikube --profile my-profile config set cpus 4
+    minikube --profile pack-apps config set memory 8192
+    minikube --profile pack-apps config set cpus 4
 
-    // minikube --profile my-profile config set vm-driver virtualbox
-    minikube --profile my-profile config set vm-driver docker
+    // minikube --profile pack-apps config set vm-driver virtualbox
+    minikube --profile pack-apps config set vm-driver docker
 
-    minikube --profile my-profile config set kubernetes-version v1.20.2
-    minikube start --profile my-profile
+    minikube --profile pack-apps config set kubernetes-version v1.20.2
+    minikube start --profile pack-apps
 }
 ```
 
 <br/>
 
     // Enable ingress
-    $ minikube addons --profile my-profile enable ingress
+    $ minikube addons --profile pack-apps enable ingress
 
 <br/>
 
-    $ minikube --profile my-profile ip
+    $ minikube --profile pack-apps ip
     172.17.0.2
 
 <br/>
@@ -95,8 +109,8 @@ $ {
 #---------------------------------------------------------------------
 # Minikube
 #---------------------------------------------------------------------
-172.17.0.2 frontend.minikube.local
-172.17.0.2 backend.minikube.local
+192.168.49.2 frontend.minikube.local
+192.168.49.2 backend.minikube.local
 ```
 
 <br/>
