@@ -3,8 +3,8 @@ kind: Config
 build:
   local:
     push: true
-  # tagPolicy:
-  #   sha256: {}
+  tagPolicy:
+    sha256: {}
   # tagPolicy:
   #   gitCommit: {}
   artifacts:
@@ -33,8 +33,15 @@ deploy:
         chartPath: ../apps/v1.1/chart/guestbook/
         skipBuildDependencies: true
 
+        # valuesFiles:
+        #   - ../apps/v1.1/chart/guestbook/charts/frontend/values.yaml
+        #   - ../apps/v1.1/chart/guestbook/charts/backend/values.yaml
+
         artifactOverrides:
           frontend:
             image: webmakaka/devops-frontend
           backend:
             image: webmakaka/devops-backend
+
+        imageStrategy:
+          helm: {}
