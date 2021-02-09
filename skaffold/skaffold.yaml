@@ -1,10 +1,10 @@
 apiVersion: skaffold/v2beta11
 kind: Config
 build:
-  # local:
-  #   push: true
-  tagPolicy:
-    sha256: {}
+  local:
+    push: true
+  # tagPolicy:
+  #   sha256: {}
   # tagPolicy:
   #   gitCommit: {}
   artifacts:
@@ -32,8 +32,9 @@ deploy:
         recreatePods: true
         chartPath: ../apps/v1.1/chart/guestbook/
         skipBuildDependencies: true
+
         artifactOverrides:
           frontend:
-              image: webmakaka/devops-frontend
+            image: webmakaka/devops-frontend
           backend:
-              image: webmakaka/devops-backend
+            image: webmakaka/devops-backend

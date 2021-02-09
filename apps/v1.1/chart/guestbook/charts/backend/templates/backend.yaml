@@ -13,7 +13,7 @@ spec:
         app: backend
     spec:
       containers:
-        - image: webmakaka/devops-backend:{{ .Values.image.tag }}
+        - image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
           imagePullPolicy: Always
           name: backend
           ports:
