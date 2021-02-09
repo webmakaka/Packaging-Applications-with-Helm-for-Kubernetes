@@ -51,7 +51,6 @@ app.use(function (req, res, next) {
 });
 
 app.get('/metrics', async (req, res) => {
-  console.log('Metrics 01');
   // Return all metrics the Prometheus exposition format
   res.setHeader('Content-Type', register.contentType);
   result = await register.metrics();
