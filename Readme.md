@@ -126,6 +126,28 @@ $ {
 
 <br/>
 
+### Run app
+
+<br/>
+
+    $ cd skaffold
+
+    $ docker login
+
+Need to update my docker image name webmakaka/\*\*\* to your in scripts from skaffold and apps/v1.1/chart folders.
+
+    $ skaffold dev
+
+<br/>
+
+    $ kubectl get pods
+
+<br/>
+
+browser -> http://frontend.minikube.local
+
+<br/>
+
 ## 05 - Building Helm Charts
 
 <br/>
