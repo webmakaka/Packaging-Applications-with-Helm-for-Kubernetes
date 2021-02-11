@@ -1,0 +1,6 @@
+resources:
+  - mongodb.yaml
+  - mongodb-service.yaml
+  - mongodb-secret.yaml
+  - mongodb-persistent-volume.yaml
+  - mongodb-persistent-volume-claim.yaml

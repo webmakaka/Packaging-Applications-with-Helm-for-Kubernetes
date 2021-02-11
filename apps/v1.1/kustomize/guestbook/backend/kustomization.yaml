@@ -1,0 +1,4 @@
+resources:
+  - backend.yaml
+  - backend-service.yaml
+  - backend-secret.yaml

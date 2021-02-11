@@ -1,0 +1,5 @@
+resources:
+  - ingress.yaml
+  - frontend.yaml
+  - frontend-service.yaml
+  - frontend-configmap.yaml
