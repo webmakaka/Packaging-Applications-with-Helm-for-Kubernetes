@@ -1,0 +1,35 @@
+apiVersion: skaffold/v2beta11
+kind: Config
+build:
+  local:
+    push: true
+  tagPolicy:
+    sha256: {}
+  # tagPolicy:
+  #   gitCommit: {}
+  artifacts:
+    - image: webmakaka/devops-frontend
+      context: ../apps/v1/app/frontend
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: 'src/**/*.ts*'
+            dest: .
+    - image: webmakaka/devops-backend
+      context: ../apps/v1/app/backend
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: '*.js'
+            dest: .
+deploy:
+  statusCheckDeadlineSeconds: 60
+  kustomize:
+    paths:
+      [
+        '../apps/v1.1/kustomize/guestbook/database',
+        '../apps/v1.1/kustomize/guestbook/frontend',
+        '../apps/v1.1/kustomize/guestbook/backend',
+      ]

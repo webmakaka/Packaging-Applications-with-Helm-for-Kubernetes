@@ -63,7 +63,7 @@ deploy-app-test:
     - mkdir -p ~/.kube/ && echo $KUBE_CONFIG | base64 -d > ~/.kube/config
     - kubectl cluster-info
     - curl -L https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
-    - helm upgrade myguestbook -i apps/v1.1/chart/guestbook --reuse-values --set-string frontend.image.tag=$CI_COMMIT_SHORT_SHA --set-string backend.image.tag=$CI_COMMIT_SHORT_SHA
+    - helm upgrade myguestbook -i apps/v1.1/helm/guestbook --reuse-values --set-string frontend.image.tag=$CI_COMMIT_SHORT_SHA --set-string backend.image.tag=$CI_COMMIT_SHORT_SHA
 
 deploy-app-prod:
   stage: deploy
@@ -75,4 +75,4 @@ deploy-app-prod:
     - mkdir -p ~/.kube/ && echo $KUBE_CONFIG | base64 -d > ~/.kube/config
     - kubectl cluster-info
     - curl -L https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
-    - helm upgrade myguestbook -i apps/v1.1/chart/guestbook --reuse-values --set-string frontend.image.tag=$CI_COMMIT_TAG --set-string backend.image.tag=$CI_COMMIT_TAG
+    - helm upgrade myguestbook -i apps/v1.1/helm/guestbook --reuse-values --set-string frontend.image.tag=$CI_COMMIT_TAG --set-string backend.image.tag=$CI_COMMIT_TAG

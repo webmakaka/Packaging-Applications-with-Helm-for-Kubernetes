@@ -30,7 +30,7 @@ deploy:
       - name: guestbook-helm
         namespace: default
         recreatePods: true
-        chartPath: ../apps/v1.1/chart/guestbook/
+        chartPath: ../apps/v1.1/helm/guestbook/
         skipBuildDependencies: true
 
         # valuesFiles:

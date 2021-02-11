@@ -126,6 +126,15 @@ $ {
 
 <br/>
 
+### Kustomize installation
+
+```
+$ curl -s "https://raw.githubusercontent.com/\
+kubernetes-sigs/kustomize/master/hack/install_kustomize.sh"  | bash && chmod +x kustomize && sudo mv kustomize /usr/local/bin/
+```
+
+<br/>
+
 ### Run app
 
 <br/>
@@ -136,7 +145,11 @@ $ {
 
 Need to update my docker image name webmakaka/\*\*\* to your in scripts from skaffold and apps/v1.1/chart folders.
 
-    $ skaffold dev
+    $ skaffold dev -f ./skaffold-helm.yaml
+
+or
+
+    $ skaffold dev -f ./skaffold-kustomize.yaml
 
 <br/>
 
